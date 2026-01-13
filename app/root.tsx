@@ -6,9 +6,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteLoaderData,
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import { getUser } from "./auth.server";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [
@@ -24,7 +26,15 @@ export const links: Route.LinksFunction = () => [
   },
 ];
 
+export async function loader({ request }: Route.LoaderArgs) {
+  const user = await getUser(request);
+  return { user };
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const data = useRouteLoaderData<typeof loader>("root");
+  const user = data?.user;
+
   return (
     <html lang="en">
       <head>
@@ -35,10 +45,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <header className="bg-gray-900 text-white p-4 shadow-md">
-          <div className="container mx-auto flex justify-center">
+          <div className="container mx-auto relative flex justify-center items-center">
             <Link to="/" className="text-xl font-bold hover:text-gray-300">
               Interview Tracker
             </Link>
+            {user && (
+              <div className="absolute right-0 flex items-center gap-3">
+                <span className="text-sm font-medium hidden sm:block">
+                  {user.profile.displayName}
+                </span>
+                <img
+                  src={user.profile.photo}
+                  alt={user.profile.displayName}
+                  className="w-10 h-10 rounded-full border-2 border-gray-700 object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            )}
           </div>
         </header>
         {children}
