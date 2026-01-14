@@ -25,6 +25,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
       {user ? (
         <div className="flex flex-col items-center gap-2">
           <Link
+            to={`/applications/${user.profile.id}`}
+            className="mt-4 text-blue-600 hover:underline"
+          >
+            Applications
+          </Link>
+          <Link
             to={`/calendar/${user.profile.id}`}
             className="mt-4 text-blue-600 hover:underline"
           >

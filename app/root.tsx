@@ -46,6 +46,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <header className="bg-gray-900 text-white p-4 shadow-md">
           <div className="container mx-auto relative flex justify-center items-center">
+            {user && (
+              <div className="absolute left-0 hidden sm:flex gap-4">
+                <Link
+                  to={`/applications/${user.profile.id}`}
+                  className="hover:text-gray-300 font-medium"
+                >
+                  Applications
+                </Link>
+                <Link
+                  to={`/calendar/${user.profile.id}`}
+                  className="hover:text-gray-300 font-medium"
+                >
+                  Interviews
+                </Link>
+              </div>
+            )}
             <Link to="/" className="text-xl font-bold hover:text-gray-300">
               Interview Tracker
             </Link>
