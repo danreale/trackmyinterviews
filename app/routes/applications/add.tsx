@@ -41,7 +41,9 @@ export async function action({ request }: Route.ActionArgs) {
 export default function AddApplication() {
   return (
     <main className="container mx-auto p-4 pt-10 max-w-lg">
-      <h1 className="text-2xl font-bold mb-6">Add New Application</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center">
+        Add New Application
+      </h1>
       <Form method="post" className="flex flex-col gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">

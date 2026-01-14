@@ -45,9 +45,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <header className="bg-gray-900 text-white p-4 shadow-md">
-          <div className="container mx-auto relative flex justify-center items-center">
+          <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="relative flex items-center justify-center sm:justify-start w-full sm:w-auto">
+              <Link to="/" className="text-xl font-bold hover:text-gray-300">
+                Interview Tracker
+              </Link>
+              {user && (
+                <div className="absolute right-0 sm:hidden">
+                  <img
+                    src={user.profile.photo}
+                    alt={user.profile.displayName}
+                    className="w-8 h-8 rounded-full border-2 border-gray-700 object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              )}
+            </div>
+
             {user && (
-              <div className="absolute left-0 hidden sm:flex gap-4">
+              <nav className="flex gap-6">
                 <Link
                   to={`/applications/${user.profile.id}`}
                   className="hover:text-gray-300 font-medium"
@@ -60,14 +76,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 >
                   Interviews
                 </Link>
-              </div>
+              </nav>
             )}
-            <Link to="/" className="text-xl font-bold hover:text-gray-300">
-              Interview Tracker
-            </Link>
+
             {user && (
-              <div className="absolute right-0 flex items-center gap-3">
-                <span className="text-sm font-medium hidden sm:block">
+              <div className="hidden sm:flex items-center gap-3">
+                <span className="text-sm font-medium">
                   {user.profile.displayName}
                 </span>
                 <img

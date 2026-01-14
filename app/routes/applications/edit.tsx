@@ -64,7 +64,7 @@ export default function EditApplication({ loaderData }: Route.ComponentProps) {
 
   return (
     <main className="container mx-auto p-4 pt-10 max-w-lg">
-      <h1 className="text-2xl font-bold mb-6">Edit Application</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center">Edit Application</h1>
       <Form method="post" className="flex flex-col gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">
