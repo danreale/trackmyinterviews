@@ -1,10 +1,10 @@
 import { Form, Link, redirect, useSubmit } from "react-router";
 import { getUser } from "../../auth.server";
 import { supabaseAdmin } from "../../supabase.server";
-import type { Route } from "./+types/index";
+import type { Route } from "./+types/archived";
 
 export function meta({}: Route.MetaArgs) {
-  return [{ title: "Applications" }];
+  return [{ title: "Archived Applications" }];
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {
@@ -12,18 +12,18 @@ export async function loader({ request, params }: Route.LoaderArgs) {
   if (!user) return redirect("/");
 
   if (params.userId !== user.profile.id)
-    return redirect(`/applications/${user.profile.id}`);
+    return redirect(`/applications/${user.profile.id}/archived`);
 
   const { data: applications, error } = await supabaseAdmin
     .from("applications")
     .select("*")
     .eq("user_id", user.profile.id)
-    .neq("application_status", "rejected")
+    .eq("application_status", "rejected")
     .order("date_applied", { ascending: false })
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Error fetching applications:", error);
+    console.error("Error fetching archived applications:", error);
     return { applications: [] };
   }
 
@@ -49,28 +49,23 @@ export async function action({ request }: Route.ActionArgs) {
   return null;
 }
 
-export default function Applications(props: Route.ComponentProps) {
-  const { applications } = props.loaderData;
+export default function ArchivedApplications({
+  loaderData,
+  params,
+}: Route.ComponentProps) {
+  const { applications } = loaderData;
   const submit = useSubmit();
 
   return (
     <main className="container mx-auto p-4 pt-10">
       <div className="relative flex flex-col sm:flex-row items-center sm:justify-center mb-8 gap-4">
-        <h1 className="text-3xl font-bold">Job Applications</h1>
-        <div className="flex gap-3 sm:absolute sm:right-0 w-full sm:w-auto justify-center">
-          <Link
-            to={`/applications/${props.params.userId}/archived`}
-            className="bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg hover:bg-gray-200 w-full sm:w-auto text-center font-medium shadow-sm transition-all"
-          >
-            Archived
-          </Link>
-          <Link
-            to="/applications/add"
-            className="bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 w-full sm:w-auto text-center font-medium shadow-sm transition-all"
-          >
-            Add Application
-          </Link>
-        </div>
+        <h1 className="text-3xl font-bold">Archived Applications</h1>
+        <Link
+          to={`/applications/${params.userId}`}
+          className="bg-gray-100 text-gray-700 px-6 py-2.5 rounded-lg hover:bg-gray-200 w-full sm:w-auto text-center font-medium shadow-sm transition-all sm:absolute sm:right-0"
+        >
+          Back to Applications
+        </Link>
       </div>
 
       {/* Mobile View */}
@@ -266,7 +261,7 @@ export default function Applications(props: Route.ComponentProps) {
       </div>
       {applications.length === 0 && (
         <p className="text-center text-gray-500 mt-8">
-          No applications tracked yet.
+          No archived applications found.
         </p>
       )}
     </main>
